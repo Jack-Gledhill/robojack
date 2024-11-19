@@ -1,2 +1,3 @@
-# robojack
-A Discord bot that does cool things in servers I like
+# RoboJack
+
+RoboJack is just a personal bot I made for myself. It does a few misc things here and there.
