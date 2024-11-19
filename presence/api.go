@@ -6,6 +6,7 @@ import (
 	"os"
 	"time"
 
+	"github.com/Jack-Gledhill/robojack/env"
 	"github.com/Jack-Gledhill/robojack/log"
 	"github.com/Jack-Gledhill/robojack/utils"
 
@@ -34,7 +35,7 @@ var (
 )
 
 func init() {
-	b, err := os.ReadFile(CredentialsFile)
+	b, err := os.ReadFile(env.Web.Presence.DataDirectory + CredentialsFile)
 	if err != nil {
 		log.Fatal("Unable to read credentials.json: %s", err)
 	}
@@ -44,7 +45,7 @@ func init() {
 		log.Fatal("Unable to authenticate with Google: %s", err)
 	}
 
-	Token, err = TokenFromFile("token.json")
+	Token, err = TokenFromFile(env.Web.Presence.DataDirectory + "token.json")
 	if err != nil {
 		authURL := Config.AuthCodeURL(OAuthStateToken, oauth2.AccessTypeOffline)
 		log.Info("To authenticate Google Calendar, visit the following URL: %s", authURL)

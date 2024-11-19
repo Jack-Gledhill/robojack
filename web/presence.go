@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"os"
 
+	"github.com/Jack-Gledhill/robojack/env"
 	"github.com/Jack-Gledhill/robojack/log"
 	"github.com/Jack-Gledhill/robojack/presence"
 
@@ -73,7 +74,7 @@ func PresenceAuth(c *gin.Context) {
 	}
 
 	// Save the token to a file so we don't have to authenticate on each restart
-	err = SaveToken("token.json", token)
+	err = SaveToken(env.Web.Presence.DataDirectory+"token.json", token)
 	if err != nil {
 		log.Error("Couldn't save token: %s", err)
 	}
