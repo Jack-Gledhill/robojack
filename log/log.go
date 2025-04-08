@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/Jack-Gledhill/robojack/env"
+	"github.com/Jack-Gledhill/robojack/config"
 	"github.com/Jack-Gledhill/robojack/utils"
 )
 
@@ -18,7 +18,7 @@ type Log struct {
 // Print is a helper than changes behaviour based on the environment. In production, logs are output as JSON
 // In development, logs are output in a human-readable format
 func (l *Log) Print() {
-	if env.Development() {
+	if config.IsDevelopment() {
 		l.PrettyPrint()
 	} else {
 		l.JSONPrint()

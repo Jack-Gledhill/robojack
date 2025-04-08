@@ -5,10 +5,17 @@ import (
 	"math"
 	"runtime"
 
-	"github.com/Jack-Gledhill/robojack/env"
-	"github.com/gin-gonic/gin"
+	"github.com/Jack-Gledhill/robojack/config"
 
 	"github.com/bwmarrin/discordgo"
+)
+
+const (
+	basicInfo   = "Environment: `%s`\nOperating System: `%s`\nRegistered Owner: <@%s>"
+	cpuInfo     = "Logical Cores: `%d`\nActive Goroutines: `%d`\nGC Usage: `%d%%`"
+	gitInfo     = "Commit: %s\nBranch/tag: `%s`"
+	memoryInfo  = "Allocated: `%d MB`\nReserved: `%d MB`\nGC Cycles: `%d`"
+	versionInfo = "Go: `%s`\nDiscordGo: `%s`"
 )
 
 func init() {
@@ -26,19 +33,23 @@ func Debug(s *discordgo.Session, e *discordgo.InteractionCreate) {
 			Embeds: []*discordgo.MessageEmbed{
 				{
 					Title:       "🔧 Debugging Information",
-					Description: fmt.Sprintf("Environment: `%s`\nOperating system: `%s`\nRegistered owner: <@%s>", env.Mode(), env.Build.OS, env.Bot.OwnerID),
+					Description: fmt.Sprintf(basicInfo, config.Mode(), config.Build.OS, config.Bot.OwnerID),
 					Fields: []*discordgo.MessageEmbedField{
 						{
 							Name:  "Versions",
-							Value: fmt.Sprintf("Go: `%s`\nDiscordGo: `%s`\nGin: `%s`\nCommit Hash: %s", runtime.Version(), discordgo.VERSION, gin.Version, GetCommit()),
+							Value: fmt.Sprintf(versionInfo, runtime.Version(), discordgo.VERSION),
+						},
+						{
+							Name:  "Git",
+							Value: fmt.Sprintf(gitInfo, GetCommit(), config.Git.Ref),
 						},
 						{
 							Name:  "Memory",
-							Value: fmt.Sprintf("Allocated: `%d MB`\nReserved: `%d MB`\nGC cycles: `%d`", BtoMB(m.Alloc), BtoMB(m.Sys), m.NumGC),
+							Value: fmt.Sprintf(memoryInfo, BtoMB(m.Alloc), BtoMB(m.Sys), m.NumGC),
 						},
 						{
 							Name:  "CPU",
-							Value: fmt.Sprintf("Logical Cores: `%d`\nActive Goroutines: `%d`\nGarbage Collector usage: `%d%%`", runtime.NumCPU(), runtime.NumGoroutine(), ToPercent(m.GCCPUFraction)),
+							Value: fmt.Sprintf(cpuInfo, runtime.NumCPU(), runtime.NumGoroutine(), ToPercent(m.GCCPUFraction)),
 						},
 					},
 				},
@@ -51,11 +62,15 @@ func Debug(s *discordgo.Session, e *discordgo.InteractionCreate) {
 }
 
 func GetCommit() string {
-	if env.Build.Git.Modified {
-		return fmt.Sprintf("[%s](%s/commit/%s) (modified)", env.Build.Git.Revision[:7], SourceRepository, env.Build.Git.Revision)
+	if config.Git.Revision == "" {
+		return "unknown"
 	}
 
-	return fmt.Sprintf("[%s](%s)", env.Build.Git.Revision[:7], SourceRepository)
+	if config.Git.Modified {
+		return fmt.Sprintf("[%s](%s/commit/%s) (modified)", config.Git.Revision[:7], config.Git.Repository, config.Git.Revision)
+	}
+
+	return fmt.Sprintf("[%s](%s)", config.Git.Revision[:7], config.Git.Repository)
 }
 
 func BtoMB(b uint64) uint64 {

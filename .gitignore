@@ -25,3 +25,6 @@ go.work.sum
 .env
 credentials.json
 .DS_Store
+
+.idea/
+config.yml

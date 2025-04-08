@@ -2,32 +2,33 @@ package main
 
 import (
 	"fmt"
+	"os"
+	"os/signal"
+	"syscall"
 
 	"github.com/Jack-Gledhill/robojack/bot/commands"
 	"github.com/Jack-Gledhill/robojack/bot/events"
-	"github.com/Jack-Gledhill/robojack/env"
-	"github.com/Jack-Gledhill/robojack/web"
+	"github.com/Jack-Gledhill/robojack/config"
 
 	"github.com/bwmarrin/discordgo"
 )
 
-// Bot is the discordgo.Session that connects the program to Discord
-var Bot *discordgo.Session
+var bot *discordgo.Session
 
 func init() {
 	// Initialise the bot
 	var err error
-	Bot, err = discordgo.New("Bot " + env.Bot.Token)
+	bot, err = discordgo.New("Bot " + config.Bot.Token)
 	if err != nil {
 		panic(err)
 	}
 
 	// Set up the bot's identify properties
-	Bot.Identify.Intents = discordgo.IntentsGuildMessages
-	Bot.Identify.Presence = discordgo.GatewayStatusUpdate{
+	bot.Identify.Intents = discordgo.IntentsGuildMessages
+	bot.Identify.Presence = discordgo.GatewayStatusUpdate{
 		Game: discordgo.Activity{
 			Name:  "custom",
-			State: "YIIPPEE",
+			State: "YIPPEE",
 			Type:  discordgo.ActivityTypeCustom,
 		},
 		Status: "dnd",
@@ -45,19 +46,19 @@ func main() {
 	}()
 
 	// Start the bot
-	// This is NOT a blocking call, as the websocket is ran in a new goroutine
-	err := Bot.Open()
+	// This is NOT a blocking call, as the websocket is run in a new goroutine
+	err := bot.Open()
 	if err != nil {
 		panic(err)
 	}
-	defer Bot.Close()
+	defer bot.Close()
 
 	// Register any commands and event handlers
-	events.Register(Bot)
-	commands.Register(Bot)
-	defer commands.Deregister(Bot)
+	events.Register(bot)
+	commands.Register(bot)
+	defer commands.Deregister(bot)
 
-	// Start the web server
-	// This is a blocking call, and will keep the bot running too
-	web.Server.Run(env.Web.ListenAddress())
+	done := make(chan os.Signal, 1)
+	signal.Notify(done, syscall.SIGINT, syscall.SIGTERM)
+	<-done
 }

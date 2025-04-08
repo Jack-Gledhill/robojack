@@ -1,13 +1,32 @@
 FROM golang:1.23.2-bookworm AS builder
+
+COPY . /app
 WORKDIR /app
-COPY go.mod go.sum ./
+
 RUN go mod download
-COPY . .
 RUN go build -o main .
 
 FROM debian:12.7-slim AS runner
-WORKDIR /app
+
+ARG version="dev"
+ARG revision="dev"
+
+ENV MODE="production"
+ENV GIT_REF=$version
+
+LABEL org.opencontainers.image.authors="Jack Gledhill"
+LABEL org.opencontainers.image.description=""
+LABEL org.opencontainers.image.documentation="https://github.com/Jack-Gledhill/robojack"
+LABEL org.opencontainers.image.licenses="MIT"
+LABEL org.opencontainers.image.revision=$revision
+LABEL org.opencontainers.image.source="https://github.com/Jack-Gledhill/robojack"
+LABEL org.opencontainers.image.title="RoboJack"
+LABEL org.opencontainers.image.url="https://github.com/Jack-Gledhill/robojack"
+LABEL org.opencontainers.image.version=$version
+
 RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates
+
+WORKDIR /app
 COPY --from=builder /app/ /app
-ENV MODE=production
+
 ENTRYPOINT [ "./main" ]
