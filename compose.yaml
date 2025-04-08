@@ -1,0 +1,7 @@
+services:
+  robojack:
+    container_name: robojack
+    build: .
+    env_file:
+      - .env
+    restart: unless-stopped
