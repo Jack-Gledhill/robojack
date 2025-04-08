@@ -1,8 +1,9 @@
 package insult
 
 import (
-	"gopkg.in/yaml.v3"
 	"os"
+
+	"gopkg.in/yaml.v3"
 )
 
 const MasterListPath = "insults.yml"
