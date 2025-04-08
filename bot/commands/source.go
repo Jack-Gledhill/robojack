@@ -3,11 +3,10 @@ package commands
 import (
 	"fmt"
 
+	"github.com/Jack-Gledhill/robojack/config"
+
 	"github.com/bwmarrin/discordgo"
 )
-
-// SourceRepository is the base URL for the bot's repository
-const SourceRepository = "https://github.com/Jack-Gledhill/robojack"
 
 func init() {
 	New("source", "Get the link to my source code", Source)
@@ -21,7 +20,7 @@ func Source(s *discordgo.Session, e *discordgo.InteractionCreate) {
 			Embeds: []*discordgo.MessageEmbed{
 				{
 					Title:       "🧑🏻‍💻 Source Code",
-					Description: fmt.Sprintf("You know it's rude to ask a robot about his source code right? Well if you must, my repo is on [GitHub](%s).", SourceRepository),
+					Description: fmt.Sprintf("You know it's rude to ask a robot about his source code right? Well if you must, my repo is on [GitHub](%s).", config.Git.Repository),
 				},
 			},
 		},

@@ -1,0 +1,20 @@
+bot:
+  token: ""
+  owner_id: 269758783557730314
+
+emojis:
+  angry: 😡
+  crying: 😭
+  dead: 💀
+  facepalm: 🤦
+  middle_finger: 🖕
+  laser_eyes: 😈
+  love: ❤️
+  peace: ✌️
+  peeking: 👀
+  smiling: 🙂
+  sunglasses: 😎
+  thinking: 🤔
+  waving: 👋
+  weary: 😩
+  wink: 😉
