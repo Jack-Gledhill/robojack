@@ -1,8 +1,6 @@
 package config
 
-import (
-	"runtime"
-)
+import "runtime"
 
 // Build holds information about the current build, including version control and runtime information
 var Build = &BuildConfig{

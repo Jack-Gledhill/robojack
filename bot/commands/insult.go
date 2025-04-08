@@ -1,9 +1,11 @@
 package commands
 
 import (
-	"github.com/Jack-Gledhill/robojack/bot/insult"
-	"github.com/bwmarrin/discordgo"
 	"math/rand"
+
+	"github.com/Jack-Gledhill/robojack/bot/insult"
+
+	"github.com/bwmarrin/discordgo"
 )
 
 func init() {

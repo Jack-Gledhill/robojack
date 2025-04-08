@@ -40,6 +40,7 @@ func GetGitConfig() *GitConfig {
 	commit := GitConfig{
 		Ref:        ref,
 		Repository: Repository,
+		Revision:   "unknown",
 	}
 
 	if i, ok := debug.ReadBuildInfo(); ok {

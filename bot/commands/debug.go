@@ -62,15 +62,11 @@ func Debug(s *discordgo.Session, e *discordgo.InteractionCreate) {
 }
 
 func GetCommit() string {
-	if config.Git.Revision == "" {
-		return "unknown"
-	}
-
 	if config.Git.Modified {
 		return fmt.Sprintf("[%s](%s/commit/%s) (modified)", config.Git.Revision[:7], config.Git.Repository, config.Git.Revision)
 	}
 
-	return fmt.Sprintf("[%s](%s)", config.Git.Revision[:7], config.Git.Repository)
+	return fmt.Sprintf("[%s](%s/commit/%s)", config.Git.Revision[:7], config.Git.Repository, config.Git.Revision)
 }
 
 func BtoMB(b uint64) uint64 {

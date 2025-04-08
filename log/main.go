@@ -1,53 +1,47 @@
 package log
 
-import "os"
+import (
+	"os"
+	"time"
 
-const (
-	LevelDebug   = iota
-	LevelInfo    = iota
-	LevelWarning = iota
-	LevelError   = iota
-	LevelFatal   = iota
-	// PrettyPrintFormat is a text/template string that will format the output when in development
-	PrettyPrintFormat = "[{{.Timestamp}}] [{{.LevelName}}] {{.Message}}"
+	"github.com/rs/zerolog"
 )
 
-// LevelStrings maps each log level to a name that will be used when pretty printing
-var LevelStrings = map[int]string{
-	LevelDebug:   "DEBUG",
-	LevelInfo:    "INFO",
-	LevelWarning: "WARN",
-	LevelError:   "ERROR",
-	LevelFatal:   "FATAL",
+var L zerolog.Logger
+
+func init() {
+	output := zerolog.ConsoleWriter{Out: os.Stderr, TimeFormat: time.RFC3339}
+
+	L = zerolog.New(output).
+		Level(zerolog.TraceLevel).
+		With().Timestamp().CallerWithSkipFrameCount(zerolog.CallerSkipFrameCount + 1).
+		Logger()
 }
 
-// Debug logs a message at the debug level
-func Debug(m string, v ...interface{}) {
-	l := NewLog(LevelDebug, m, v...)
-	go l.Print()
+func Trace(msg string, v ...interface{}) {
+	L.Trace().Msgf(msg, v...)
 }
 
-// Info logs a message at the info level
-func Info(m string, v ...interface{}) {
-	l := NewLog(LevelInfo, m, v...)
-	go l.Print()
+func Debug(msg string, v ...interface{}) {
+	L.Debug().Msgf(msg, v...)
 }
 
-// Warning logs a message at the warning level
-func Warning(m string, v ...interface{}) {
-	l := NewLog(LevelWarning, m, v...)
-	go l.Print()
+func Info(msg string, v ...interface{}) {
+	L.Info().Msgf(msg, v...)
 }
 
-// Error logs a message at the error level
-func Error(m string, v ...interface{}) {
-	l := NewLog(LevelError, m, v...)
-	go l.Print()
+func Warn(msg string, v ...interface{}) {
+	L.Warn().Msgf(msg, v...)
 }
 
-// Fatal logs a message at the fatal level and causes the program to exit immediately
-func Fatal(m string, v ...interface{}) {
-	l := NewLog(LevelFatal, m, v...)
-	l.Print()
-	os.Exit(1)
+func Error(msg string, v ...interface{}) {
+	L.Error().Msgf(msg, v...)
+}
+
+func Fatal(msg string, v ...interface{}) {
+	L.Fatal().Msgf(msg, v...)
+}
+
+func Panic(msg string, v ...interface{}) {
+	L.Panic().Msgf(msg, v...)
 }
