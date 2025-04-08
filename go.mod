@@ -4,9 +4,8 @@ go 1.23.2
 
 require (
 	github.com/bwmarrin/discordgo v0.28.1
-	github.com/common-nighthawk/go-figure v0.0.0-20210622060536-734e95fb86be
 	github.com/gin-gonic/gin v1.10.0
-	golang.org/x/oauth2 v0.23.0
+	golang.org/x/oauth2 v0.29.0
 	google.golang.org/api v0.205.0
 )
 
