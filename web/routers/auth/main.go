@@ -12,4 +12,5 @@ func AddHandlers(g *gin.RouterGroup) {
 	g.GET("/login", login)
 	g.GET("/callback", callback)
 	g.GET("/me", me)
+	g.GET("/logout", logout)
 }
