@@ -1,16 +1,10 @@
 package main
 
 import (
-	"os"
-	"os/signal"
-	"runtime"
-	"syscall"
-
 	"github.com/Jack-Gledhill/robojack/bot"
-	"github.com/Jack-Gledhill/robojack/config"
+	"github.com/Jack-Gledhill/robojack/debug"
 	"github.com/Jack-Gledhill/robojack/log"
-
-	"github.com/bwmarrin/discordgo"
+	"github.com/Jack-Gledhill/robojack/web"
 )
 
 func init() {
@@ -20,15 +14,7 @@ func init() {
 			log.Error("Recovered from a panic: %s", err)
 		}
 	}()
-}
 
-func main() {
-	go bot.Start()
-	defer bot.Close()
-
-	bot.WaitUntilReady()
-
-	// Print some info to indicate that the bot has started up
 	log.Info(" _____   ____  ____   ____       _         _____ _  __")
 	log.Info("|  __ \\ / __ \\|  _ \\ / __ \\     | |  /\\   / ____| |/ /")
 	log.Info("| |__) | |  | | |_) | |  | |    | | /  \\ | |    | ' / ")
@@ -36,18 +22,25 @@ func main() {
 	log.Info("| | \\ \\| |__| | |_) | |__| | |__| / ____ \\ |____| . \\ ")
 	log.Info("|_|  \\_\\\\____/|____/ \\____/ \\____/_/    \\_\\_____|_|\\_\\")
 	log.Info("===== Build & Runtime Information =====")
-	log.Info("Mode:      %s", config.Mode())
-	log.Info("Log Level: %s", log.Level.String())
-	log.Info("DiscordGo: %s", discordgo.VERSION)
-	log.Info("Go:        %s", runtime.Version())
-	log.Info("OS:        %s", config.Build.OS)
-	log.Info("Revision:  %s", config.Git.Revision)
-	log.Info("Version:   %s", config.Git.Ref)
+	log.Info("Mode:      %s", debug.Runtime.Mode)
+	log.Info("Log Level: %s", debug.Runtime.LogLevel)
+	log.Info("DiscordGo: %s", debug.Build.DiscordGo)
+	log.Info("Gin:       %s", debug.Build.Gin)
+	log.Info("Go:        %s", debug.Build.Go)
+	log.Info("OS:        %s", debug.System.OS)
+	log.Info("Arch:      %s", debug.System.Arch)
+	log.Info("Revision:  %s", debug.Git.Commit.Hash)
+	log.Info("Version:   %s", debug.Git.Ref)
 	log.Info("=======================================")
+}
 
-	// Block until a kill signal is received
-	done := make(chan os.Signal, 1)
-	signal.Notify(done, syscall.SIGINT, syscall.SIGTERM)
-	<-done
-	log.Info("===== Shutting down =====")
+func main() {
+	defer log.Info("===== Shutting down =====")
+
+	// Start the bot in a separate goroutine
+	go bot.Start()
+	defer bot.Close()
+
+	// Start the webserver, this will block until the program exits
+	web.Start()
 }

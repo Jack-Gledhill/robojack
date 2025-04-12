@@ -3,7 +3,7 @@ package commands
 import (
 	"fmt"
 
-	"github.com/Jack-Gledhill/robojack/config"
+	"github.com/Jack-Gledhill/robojack/debug"
 
 	"github.com/bwmarrin/discordgo"
 )
@@ -20,7 +20,7 @@ func Source(s *discordgo.Session, e *discordgo.InteractionCreate) {
 			Embeds: []*discordgo.MessageEmbed{
 				{
 					Title:       "🧑🏻‍💻 Source Code",
-					Description: fmt.Sprintf("You know it's rude to ask a robot about his source code right? Well if you must, my repo is on [GitHub](%s).", config.Git.Repository),
+					Description: fmt.Sprintf("You know it's rude to ask a robot about his source code right? Well if you must, my repo is on [GitHub](%s).", debug.Git.Repository),
 				},
 			},
 		},

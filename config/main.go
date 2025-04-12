@@ -13,6 +13,7 @@ var file FileConfig
 type FileConfig struct {
 	Bot    BotConfig   `yaml:"bot"`
 	Emojis EmojiConfig `yaml:"emojis"`
+	Web    WebConfig   `yaml:"web"`
 }
 
 func init() {
