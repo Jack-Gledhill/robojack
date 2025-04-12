@@ -4,6 +4,7 @@ import (
 	"github.com/Jack-Gledhill/robojack/config"
 	"github.com/Jack-Gledhill/robojack/log"
 	"github.com/Jack-Gledhill/robojack/web/routers"
+	"github.com/Jack-Gledhill/robojack/web/routers/auth"
 
 	"github.com/gin-gonic/gin"
 )
@@ -20,9 +21,8 @@ func init() {
 	engine.Use(gin.Recovery())
 
 	// Add all routers to the engine
-	engine.GET("/ping", routers.Ping)
-	engine.GET("/debug", routers.Debug)
-	engine.GET("/teapot", routers.Teapot)
+	routers.AddHandlers(engine.Group(""))
+	auth.AddHandlers(engine.Group("/auth"))
 }
 
 // Start will call engine.Run() and block until gin encounters an error or the program terminates

@@ -1,19 +1,19 @@
 package routers
 
 import (
-	"github.com/Jack-Gledhill/robojack/debug"
+	dbg "github.com/Jack-Gledhill/robojack/debug"
 	"github.com/Jack-Gledhill/robojack/web/response"
 
 	"github.com/gin-gonic/gin"
 )
 
-func Debug(c *gin.Context) {
+func debug(c *gin.Context) {
 	response.New().
 		Data(gin.H{
-			"build":   debug.Build,
-			"git":     debug.Git,
-			"runtime": debug.Runtime.Snapshot(),
-			"system":  debug.System,
+			"build":   dbg.Build,
+			"git":     dbg.Git,
+			"runtime": dbg.Runtime.Snapshot(),
+			"system":  dbg.System,
 		}).
 		Send(c)
 }
