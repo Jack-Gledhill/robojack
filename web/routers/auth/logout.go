@@ -9,6 +9,6 @@ import (
 )
 
 func logout(c *gin.Context) {
-	c.SetCookie(cookieToken, "", -1, "/", config.Web.Domain().Hostname(), false, false)
+	c.SetCookie(config.Web.JWT.Cookie, "", -1, "/", config.Web.Domain().Hostname(), false, false)
 	c.Redirect(http.StatusTemporaryRedirect, "/")
 }
