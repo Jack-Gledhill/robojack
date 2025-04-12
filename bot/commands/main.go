@@ -1,6 +1,10 @@
 package commands
 
-import "github.com/bwmarrin/discordgo"
+import (
+	"github.com/Jack-Gledhill/robojack/log"
+
+	"github.com/bwmarrin/discordgo"
+)
 
 var (
 	// Commands contains all the commands that will be registered when the bot starts
@@ -14,6 +18,8 @@ var (
 // Register sends the list of Commands to Discord to be registered
 func Register(s *discordgo.Session) {
 	for _, c := range Commands {
+		log.Debug("Registering command: %s", c.Name)
+
 		cmd, err := s.ApplicationCommandCreate(s.State.User.ID, "", c)
 		if err != nil {
 			panic(err)
@@ -26,11 +32,15 @@ func Register(s *discordgo.Session) {
 // Deregister is the inverse of Register and should be called when the bot exits
 func Deregister(s *discordgo.Session) {
 	for _, c := range Registered {
+		log.Debug("Deregistering command: %s", c.Name)
+
 		err := s.ApplicationCommandDelete(s.State.User.ID, "", c.ID)
 		if err != nil {
 			panic(err)
 		}
 	}
+
+	Registered = nil
 }
 
 // New sets up a new command and adds it to Handlers
