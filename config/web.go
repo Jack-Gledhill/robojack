@@ -25,6 +25,7 @@ func (w *WebConfig) Domain() *url.URL {
 }
 
 type JWTConfig struct {
+	Cookie        string `yaml:"cookie"`
 	SigningSecret string `yaml:"signing_secret"`
 	Validity      int    `yaml:"validity"`
 }

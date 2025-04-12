@@ -22,6 +22,7 @@ emojis:
 web:
   domain: https://robojack.com
   jwt:
+    cookie: authorization
     signing_secret: ""
     validity: 7 # Measured in days
   oauth:

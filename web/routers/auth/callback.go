@@ -17,7 +17,7 @@ var jwtCookieMaxAge = jwt.Validity.Seconds()
 
 func callback(c *gin.Context) {
 	// Check for a valid state
-	if !oauth.PopState(c.Query(queryState)) {
+	if !oauth.PopState(c.Query("state")) {
 		response.New().
 			Status(http.StatusBadRequest).
 			Msg("invalid oauth state").
@@ -26,7 +26,7 @@ func callback(c *gin.Context) {
 	}
 
 	// Fetch code from query string or fail if not given
-	code := c.Query(queryCode)
+	code := c.Query("code")
 	if code == "" {
 		response.New().
 			Status(http.StatusBadRequest).
@@ -81,7 +81,7 @@ func callback(c *gin.Context) {
 	}
 
 	// Set the JWT as a cookie on the user's browser
-	c.SetCookie(cookieToken, userToken, int(jwtCookieMaxAge), "/", config.Web.Domain().Hostname(), false, false)
+	c.SetCookie(config.Web.JWT.Cookie, userToken, int(jwtCookieMaxAge), "/", config.Web.Domain().Hostname(), false, false)
 
 	// All being well, redirect to the dashboard
 	c.Redirect(http.StatusTemporaryRedirect, "/")

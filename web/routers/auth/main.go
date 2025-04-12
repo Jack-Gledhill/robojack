@@ -1,16 +1,13 @@
 package auth
 
-import "github.com/gin-gonic/gin"
-
-const (
-	cookieToken = "authorization"
-	queryCode   = "code"
-	queryState  = "state"
+import (
+	"github.com/Jack-Gledhill/robojack/web/middleware"
+	"github.com/gin-gonic/gin"
 )
 
 func AddHandlers(g *gin.RouterGroup) {
 	g.GET("/login", login)
 	g.GET("/callback", callback)
-	g.GET("/me", me)
+	g.GET("/me", middleware.Authentication, me)
 	g.GET("/logout", logout)
 }
