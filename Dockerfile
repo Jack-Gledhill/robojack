@@ -24,6 +24,8 @@ LABEL org.opencontainers.image.title="RoboJack"
 LABEL org.opencontainers.image.url="https://github.com/Jack-Gledhill/robojack"
 LABEL org.opencontainers.image.version=$version
 
+EXPOSE 8080
+
 RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates
 
 WORKDIR /app
