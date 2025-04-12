@@ -18,3 +18,6 @@ emojis:
   waving: 👋
   weary: 😩
   wink: 😉
+
+web:
+  port: ":8080"
