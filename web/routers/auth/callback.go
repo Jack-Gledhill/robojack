@@ -84,5 +84,5 @@ func callback(c *gin.Context) {
 	c.SetCookie(config.Web.JWT.Cookie, userToken, int(jwtCookieMaxAge), "/", config.Web.Domain().Hostname(), false, false)
 
 	// All being well, redirect to the dashboard
-	c.Redirect(http.StatusTemporaryRedirect, "/")
+	c.Redirect(http.StatusTemporaryRedirect, "/dashboard")
 }
