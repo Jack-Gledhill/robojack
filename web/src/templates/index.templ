@@ -1,0 +1,133 @@
+package templates
+
+import (
+    "math"
+    "strconv"
+    "time"
+
+    "github.com/Jack-Gledhill/robojack/debug"
+    "github.com/Jack-Gledhill/robojack/web/oauth"
+)
+
+templ Index(b *oauth.User, u *oauth.User, sys *debug.SystemInfo, build *debug.BuildInfo, git *debug.GitInfo, env debug.RuntimeSnapshot) {
+    @page(b, u) {
+        <div class="grid grid-cols-3 gap-8">
+            @widget() {
+                @widgetTitle() {
+                    <i class="fas fa-server fa-fw"></i> System Information
+                }
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <p>Platform:</p>
+                        <p class="my-2">CPU arch:</p>
+                        <p>Logical CPUs:</p>
+                    </div>
+
+                    <div class="text-right">
+                        <p>{ sys.OS }</p>
+                        <p class="my-2">{ sys.Arch }</p>
+                        <p>{ strconv.Itoa(sys.LogicalCPUs) }</p>
+                    </div>
+                </div>
+            }
+
+            @widget() {
+                @widgetTitle() {
+                    <i class="fas fa-code fa-fw"></i> Build Information
+                }
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <p>DiscordGo:</p>
+                        <p class="my-2">Gin:</p>
+                        <p>Golang:</p>
+                    </div>
+
+                    <div class="text-right">
+                        <p>{ build.DiscordGo }</p>
+                        <p class="my-2">{ build.Gin }</p>
+                        <p>{ build.Go }</p>
+                    </div>
+                </div>
+            }
+
+            @widget() {
+                @widgetTitle() {
+                    <a class="text-blue-500 hover:text-blue-400" href={ templ.SafeURL(git.Repository) }>
+                        <i class="fas fa-code-pull-request fa-fw"></i>
+                        <span class="underline">Git Information</span>
+                    </a>
+                }
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <p>Branch/tag:</p>
+                        <p class="my-2">Commit:</p>
+                        <p>Modified:</p>
+                    </div>
+
+                    <div class="text-right">
+                        <p>
+                            <a class="text-blue-500 hover:text-blue-400" href={ templ.SafeURL(git.Repository + "/tree/" + git.Ref) }>
+                                { git.Ref }
+                            </a>
+                        </p>
+                        <p class="my-2">
+                            <a class="text-blue-500 hover:text-blue-400" href={ templ.SafeURL(git.Repository + "/commit/" + git.Commit.Hash) }>
+                                { git.Commit.Hash[:7] }
+                            </a>
+                        </p>
+                        <p>
+                            { strconv.FormatBool(git.Commit.Modified) }
+                        </p>
+                    </div>
+                </div>
+            }
+
+            @widget() {
+                @widgetTitle() {
+                    <i class="fas fa-seedling fa-fw"></i>
+                    Environment
+                }
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <p>Log level:</p>
+                        <p class="my-2">Mode:</p>
+                        <p>Uptime:</p>
+                    </div>
+
+                    <div class="text-right">
+                        <p>{ env.LogLevel }</p>
+                        <p class="my-2">{ env.Mode }</p>
+                        <p>{ env.Uptime.Round(time.Second).String() }</p>
+                    </div>
+                </div>
+            }
+
+            @widget() {
+                @widgetTitle() {
+                    <i class="fas fa-memory fa-fw"></i>
+                    Memory
+                }
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <p>Goroutines:</p>
+                        <p class="my-2">Allocated:</p>
+                        <p class="mb-2">GC cycles:</p>
+                        <p>GC CPU time:</p>
+                    </div>
+
+                    <div class="text-right">
+                        <p>{ strconv.Itoa(env.ActiveGoroutines) }</p>
+                        <p>{ strconv.Itoa(int(math.Round(float64(env.MemoryAllocated / 1000 / 1000)))) } MB</p>
+                        <p class="my-2">{ strconv.Itoa(int(env.GCCycles)) }</p>
+                        <p>{ strconv.Itoa(env.GCUsage) }%</p>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+}

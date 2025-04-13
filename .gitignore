@@ -28,3 +28,4 @@ credentials.json
 
 .idea/
 config.yml
+*_templ.go

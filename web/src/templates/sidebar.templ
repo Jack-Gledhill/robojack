@@ -1,0 +1,50 @@
+package templates
+
+import "github.com/Jack-Gledhill/robojack/web/oauth"
+
+templ sidebarPage(href string) {
+    <a class="p-4 hover:bg-neutral-600 rounded-lg transition duration-200 ease-in-out" href={ templ.SafeURL(href) }>
+        { children... }
+    </a>
+}
+
+templ sidebar(b *oauth.User, u *oauth.User) {
+    <div class="bg-neutral-800 text-white p-4 flex flex-col gap-8 h-full justify-between">
+        <div class="flex flex-col gap-8">
+            <div class="flex flex-col gap-4 text-center">
+                <img class="rounded-lg w-1/2 mx-auto" src={ b.AvatarURL(256) } alt="Bot's avatar" />
+                <p class="font-bold text-3xl">{ b.Username }</p>
+            </div>
+
+            <div class="flex flex-col gap-2 text-lg">
+                @sidebarPage("/dasboard") {
+                    <i class="fas fa-house fa-fw"></i> Home
+                }
+
+                @sidebarPage("/dasboard/commands") {
+                    <i class="fas fa-code fa-fw"></i> Commands
+                }
+
+                @sidebarPage("/dasboard/guilds") {
+                    <i class="fas fa-server fa-fw"></i> Guilds
+                }
+            </div>
+        </div>
+
+        <div class="grid grid-cols-8 gap-4 p-4">
+            <div class="col-span-2">
+                <img class="rounded-full" src={ u.AvatarURL(256) } alt="User's avatar" />
+            </div>
+
+            <div class="col-span-5 content-center">
+                <p class="font-bold">{ u.DisplayName }</p>
+            </div>
+
+            <div class="col-span-1 content-center text-right">
+                <a class="text-red-400 text-xl hover:text-red-600 transition duration-100 ease-in-out" href="/auth/logout">
+                    <i class="fas fa-sign-out-alt"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+}

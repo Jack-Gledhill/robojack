@@ -1,0 +1,19 @@
+package templates
+
+import "github.com/Jack-Gledhill/robojack/web/oauth"
+
+templ page(b *oauth.User, u *oauth.User) {
+    <!DOCTYPE html>
+    @head()
+    <body class="bg-neutral-700 text-white font-[JetBrains_Mono] h-screen">
+        <div class="grid grid-cols-10">
+            <div class="col-span-2 sticky h-screen">
+                @sidebar(b, u)
+            </div>
+
+            <div class="col-span-8 p-8">
+                { children... }
+            </div>
+        </div>
+    </body>
+}

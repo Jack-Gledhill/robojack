@@ -8,7 +8,7 @@ import (
 )
 
 // Build is populated at runtime with version information
-var Build = BuildInfo{
+var Build = &BuildInfo{
 	DiscordGo: discordgo.VERSION,
 	Gin:       gin.Version,
 	Go:        runtime.Version(),

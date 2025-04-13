@@ -3,6 +3,7 @@ package oauth
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"io"
 
 	"golang.org/x/oauth2"
@@ -22,6 +23,10 @@ type User struct {
 	DisplayName string `json:"global_name"`
 	ID          string `json:"id"`
 	Username    string `json:"username"`
+}
+
+func (u *User) AvatarURL(size uint16) string {
+	return fmt.Sprintf("https://cdn.discordapp.com/avatars/%s/%s.png?size=%d", u.ID, u.AvatarHash, size)
 }
 
 // GetUser takes an OAuth bearer token and fetches data for the user it belongs to

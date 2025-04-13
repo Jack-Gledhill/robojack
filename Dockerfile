@@ -1,9 +1,11 @@
-FROM golang:1.23.2-bookworm AS builder
+FROM golang:1.24-bookworm AS builder
 
 COPY . /app
 WORKDIR /app
 
 RUN go mod download
+RUN go get -tool github.com/a-h/templ/cmd/templ@latest
+RUN go tool templ generate
 RUN go build -o main .
 
 FROM debian:12.7-slim AS runner
