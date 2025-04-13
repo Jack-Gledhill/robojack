@@ -9,7 +9,7 @@ import (
 )
 
 func init() {
-	New("source", "Get the link to my source code", Source)
+	Handlers["source"] = Source
 }
 
 // Source just returns a link to the bot's GitHub repository, nothing fancy

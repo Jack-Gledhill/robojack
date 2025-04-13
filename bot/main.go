@@ -1,7 +1,6 @@
 package bot
 
 import (
-	"github.com/Jack-Gledhill/robojack/bot/commands"
 	"github.com/Jack-Gledhill/robojack/bot/events"
 	"github.com/Jack-Gledhill/robojack/config"
 	"github.com/Jack-Gledhill/robojack/log"
@@ -56,9 +55,6 @@ func Start() {
 		panic(err)
 	}
 
-	// Register slash commands
-	commands.Register(Session)
-
 	// Block until a kill signal is received
 	<-kill
 }
@@ -66,9 +62,6 @@ func Start() {
 // Close will stop the bot and deregister any commands it had
 func Close() {
 	log.Debug("Bot is stopping...")
-
-	// Deregister commands
-	commands.Deregister(Session)
 	err := Session.Close()
 	if err != nil {
 		panic(err)

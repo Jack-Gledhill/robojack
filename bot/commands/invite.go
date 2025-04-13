@@ -12,7 +12,7 @@ import (
 const InviteLinkBase = "https://discord.com/oauth2/authorize?client_id=%s&scope=applications.commands%%20bot"
 
 func init() {
-	New("invite", "Get a link to invite me to your server", Invite)
+	Handlers["invite"] = Invite
 }
 
 // Invite returns a link to invite the bot to a server, assuming the user is the owner of the bot
