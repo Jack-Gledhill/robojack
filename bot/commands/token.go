@@ -9,7 +9,7 @@ import (
 )
 
 func init() {
-	New("token", "Gets the bot's token", Token)
+	Handlers["token"] = Token
 }
 
 // Token DMs the bot's token to the owner, but mocks anyone else who attempts to use the command

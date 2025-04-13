@@ -8,7 +8,7 @@ import (
 )
 
 func init() {
-	New("ping", "Get latency information", Ping)
+	Handlers["ping"] = Ping
 }
 
 // Ping calculates and presents the bot's latencies to the Discord HTTP & WebSocket APIs.

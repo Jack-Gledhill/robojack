@@ -9,7 +9,7 @@ import (
 )
 
 func init() {
-	New("insult", "Will randomly insult you", Insult)
+	Handlers["insult"] = Insult
 }
 
 func Insult(s *discordgo.Session, e *discordgo.InteractionCreate) {

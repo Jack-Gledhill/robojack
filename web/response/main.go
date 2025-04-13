@@ -34,7 +34,7 @@ func (r *R) Msg(s string) *R {
 
 // Send will send the completed payload to the client. You should have already called Status, Msg and Data by this point
 func (r *R) Send(c *gin.Context) {
-	c.JSON(r.StatusCode, r)
+	c.IndentedJSON(r.StatusCode, r)
 }
 
 // New creates a new R instance

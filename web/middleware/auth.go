@@ -17,12 +17,17 @@ func Authentication(c *gin.Context) {
 	// Try fetch the token from cookies
 	token, err := c.Cookie(config.Web.JWT.Cookie)
 	if err != nil {
-		response.New().
-			Status(http.StatusUnauthorized).
-			Msg("not authorized").
-			Send(c)
-		c.Abort()
-		return
+		// Instead try to fetch from headers
+		token = c.Request.Header.Get("authorization")
+		if token == "" {
+			response.New().
+				Status(http.StatusUnauthorized).
+				Msg("not authorized").
+				Send(c)
+
+			c.Abort()
+			return
+		}
 	}
 
 	// Run validation checks on token
